@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -30,8 +29,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("./utils");
+import { renameVariablesAndTopLevelFields, defaultRenameFn, renameVariables } from './utils.js';
 var emptyDoc = {
     kind: 'Document',
     definitions: []
@@ -124,20 +122,20 @@ var CombinedQueryBuilderImpl = /** @class */ (function () {
         return new CombinedQueryBuilderImpl(this.operationName, newDoc, newVars);
     };
     CombinedQueryBuilderImpl.prototype.addN = function (document, variables, variableRenameFn, fieldRenameFn) {
-        if (variableRenameFn === void 0) { variableRenameFn = utils_1.defaultRenameFn; }
-        if (fieldRenameFn === void 0) { fieldRenameFn = utils_1.defaultRenameFn; }
+        if (variableRenameFn === void 0) { variableRenameFn = defaultRenameFn; }
+        if (fieldRenameFn === void 0) { fieldRenameFn = defaultRenameFn; }
         if (!variables.length) {
             return this;
         }
         return variables.reduce(function (builder, _variables, idx) {
-            var doc = utils_1.renameVariablesAndTopLevelFields(document, function (name) { return variableRenameFn(name, idx); }, function (name) { return fieldRenameFn(name, idx); });
-            var vars = utils_1.renameVariables(_variables, function (name) { return variableRenameFn(name, idx); });
+            var doc = renameVariablesAndTopLevelFields(document, function (name) { return variableRenameFn(name, idx); }, function (name) { return fieldRenameFn(name, idx); });
+            var vars = renameVariables(_variables, function (name) { return variableRenameFn(name, idx); });
             return builder.add(doc, vars);
         }, this);
     };
     return CombinedQueryBuilderImpl;
 }());
-function combinedQuery(operationName) {
+export default function combinedQuery(operationName) {
     return {
         operationName: operationName,
         add: function (document, variables) {
@@ -148,5 +146,4 @@ function combinedQuery(operationName) {
         }
     };
 }
-exports.default = combinedQuery;
 //# sourceMappingURL=index.js.map

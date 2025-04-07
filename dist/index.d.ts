@@ -1,9 +1,9 @@
 import { DocumentNode } from 'graphql';
-import { RenameFnWithIndex } from './utils';
+import { RenameFnWithIndex } from './utils.js';
 declare type OperationVariables = Record<string, any>;
 export interface NewCombinedQueryBuilder {
     operationName: string;
-    add: <TData = any, TVariables = OperationVariables>(document: DocumentNode, variables?: TVariables) => CombinedQueryBuilder<TData, TVariables>;
+    add: <TData = any, TVariables extends OperationVariables = OperationVariables>(document: DocumentNode, variables?: TVariables) => CombinedQueryBuilder<TData, TVariables>;
     addN: <TVariables = OperationVariables>(document: DocumentNode, variables: TVariables[], variableRenameFn?: RenameFnWithIndex, fieldRenameFn?: RenameFnWithIndex) => CombinedQueryBuilder<{}, {}>;
 }
 export interface CombinedQueryBuilder<TData = any, TVariables extends OperationVariables = {}> {

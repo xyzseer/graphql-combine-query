@@ -1,5 +1,5 @@
 import { DocumentNode, OperationDefinitionNode, DefinitionNode, FieldNode } from 'graphql'
-import { renameVariablesAndTopLevelFields, RenameFnWithIndex, defaultRenameFn, renameVariables } from './utils'
+import { renameVariablesAndTopLevelFields, RenameFnWithIndex, defaultRenameFn, renameVariables } from './utils.js'
 
 type OperationVariables = Record<string, any>
 
@@ -10,7 +10,7 @@ const emptyDoc: DocumentNode = {
 
 export interface NewCombinedQueryBuilder {
   operationName: string,
-  add: <TData = any, TVariables = OperationVariables>(document: DocumentNode, variables?: TVariables) => CombinedQueryBuilder<TData, TVariables>
+  add: <TData = any, TVariables extends OperationVariables = OperationVariables>(document: DocumentNode, variables?: TVariables) => CombinedQueryBuilder<TData, TVariables>
   addN: <TVariables = OperationVariables>(document: DocumentNode, variables: TVariables[], variableRenameFn?: RenameFnWithIndex, fieldRenameFn?: RenameFnWithIndex ) => CombinedQueryBuilder<{}, {}>
 }
 
@@ -23,7 +23,7 @@ export interface CombinedQueryBuilder<TData = any, TVariables extends OperationV
 
 class CombinedQueryError extends Error {}
 
-class CombinedQueryBuilderImpl<TData = any, TVariables = OperationVariables> implements CombinedQueryBuilder<TData, TVariables> {
+class CombinedQueryBuilderImpl<TData = any, TVariables extends OperationVariables = OperationVariables> implements CombinedQueryBuilder<TData, TVariables> {
 
   document: DocumentNode
   variables?: TVariables
